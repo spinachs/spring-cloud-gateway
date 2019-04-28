@@ -16,17 +16,8 @@
 
 package org.springframework.cloud.gateway.route;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import reactor.core.publisher.Flux;
-
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -50,8 +41,14 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.validation.Validator;
 import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Flux;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
+ * 从RouteDefinitionLocator获取RouteDefinition，转换成Route.
+ *
  * {@link RouteLocator} that loads routes from a {@link RouteDefinitionLocator}.
  *
  * @author Spencer Gibb
@@ -85,10 +82,12 @@ public class RouteDefinitionRouteLocator
 	@Autowired
 	private Validator validator;
 
-	public RouteDefinitionRouteLocator(RouteDefinitionLocator routeDefinitionLocator,
+	public RouteDefinitionRouteLocator(
+			RouteDefinitionLocator routeDefinitionLocator,
 			List<RoutePredicateFactory> predicates,
 			List<GatewayFilterFactory> gatewayFilterFactories,
-			GatewayProperties gatewayProperties, ConversionService conversionService) {
+			GatewayProperties gatewayProperties,
+			ConversionService conversionService) {
 		this.routeDefinitionLocator = routeDefinitionLocator;
 		this.conversionService = conversionService;
 		initFactories(predicates);
@@ -124,7 +123,8 @@ public class RouteDefinitionRouteLocator
 
 	@Override
 	public Flux<Route> getRoutes() {
-		return this.routeDefinitionLocator.getRouteDefinitions().map(this::convertToRoute)
+		return this.routeDefinitionLocator.getRouteDefinitions()
+				.map(this::convertToRoute)
 				// TODO: error handling
 				.map(route -> {
 					if (logger.isDebugEnabled()) {
@@ -140,9 +140,12 @@ public class RouteDefinitionRouteLocator
 	}
 
 	private Route convertToRoute(RouteDefinition routeDefinition) {
+		//将predicate列表合并成AsyncPredicate.
 		AsyncPredicate<ServerWebExchange> predicate = combinePredicates(routeDefinition);
+		//获取filter
 		List<GatewayFilter> gatewayFilters = getFilters(routeDefinition);
 
+		//构建route
 		return Route.async(routeDefinition).asyncPredicate(predicate)
 				.replaceFilters(gatewayFilters).build();
 	}
@@ -197,17 +200,20 @@ public class RouteDefinitionRouteLocator
 	private List<GatewayFilter> getFilters(RouteDefinition routeDefinition) {
 		List<GatewayFilter> filters = new ArrayList<>();
 
+		//添加默认过滤器
 		// TODO: support option to apply defaults after route specific filters?
 		if (!this.gatewayProperties.getDefaultFilters().isEmpty()) {
 			filters.addAll(loadGatewayFilters(DEFAULT_FILTERS,
 					this.gatewayProperties.getDefaultFilters()));
 		}
 
+		//添加配置过滤器
 		if (!routeDefinition.getFilters().isEmpty()) {
 			filters.addAll(loadGatewayFilters(routeDefinition.getId(),
 					routeDefinition.getFilters()));
 		}
 
+		//根据order升序排序.
 		AnnotationAwareOrderComparator.sort(filters);
 		return filters;
 	}

@@ -16,24 +16,25 @@
 
 package org.springframework.cloud.gateway.route;
 
+import org.springframework.cloud.gateway.filter.FilterDefinition;
+import org.springframework.cloud.gateway.handler.predicate.PredicateDefinition;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.Valid;
+import javax.validation.ValidationException;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-import javax.validation.Valid;
-import javax.validation.ValidationException;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
-import org.springframework.cloud.gateway.filter.FilterDefinition;
-import org.springframework.cloud.gateway.handler.predicate.PredicateDefinition;
-import org.springframework.validation.annotation.Validated;
-
 import static org.springframework.util.StringUtils.tokenizeToStringArray;
 
 /**
+ * Route信息定义类，最终被RouteLocator解析成Route.
+ *
  * @author Spencer Gibb
  */
 @Validated
@@ -42,6 +43,9 @@ public class RouteDefinition {
 	@NotEmpty
 	private String id = UUID.randomUUID().toString();
 
+	/**
+	 * 路由规则，转换成Route时，对应Predicate字段 。
+	 */
 	@NotEmpty
 	@Valid
 	private List<PredicateDefinition> predicates = new ArrayList<>();

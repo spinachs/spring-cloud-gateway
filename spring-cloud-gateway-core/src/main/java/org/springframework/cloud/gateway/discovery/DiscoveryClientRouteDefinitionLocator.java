@@ -16,14 +16,8 @@
 
 package org.springframework.cloud.gateway.discovery;
 
-import java.net.URI;
-import java.util.Map;
-import java.util.function.Predicate;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import reactor.core.publisher.Flux;
-
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.gateway.filter.FilterDefinition;
@@ -37,8 +31,15 @@ import org.springframework.expression.ParseException;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.SimpleEvaluationContext;
 import org.springframework.util.StringUtils;
+import reactor.core.publisher.Flux;
+
+import java.net.URI;
+import java.util.Map;
+import java.util.function.Predicate;
 
 /**
+ * 从注册中心获取路由配置.
+ *
  * TODO: change to RouteLocator? use java dsl
  *
  * @author Spencer Gibb

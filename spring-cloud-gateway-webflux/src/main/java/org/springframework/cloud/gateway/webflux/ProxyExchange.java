@@ -16,18 +16,7 @@
 
 package org.springframework.cloud.gateway.webflux;
 
-import java.lang.reflect.Type;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import org.reactivestreams.Publisher;
-import reactor.core.publisher.Mono;
-
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
@@ -44,6 +33,16 @@ import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClient.RequestBodySpec;
 import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
+
+import java.lang.reflect.Type;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * A <code>@RequestMapping</code> argument type that can proxy the request to a backend.
@@ -84,7 +83,7 @@ import org.springframework.web.server.ServerWebExchange;
  * &#64;PostMapping("/proxy")
  * public Mono&lt;ResponseEntity&lt;Foo&gt;&gt; proxy(ProxyExchange&lt;Foo&gt; proxy) throws Exception {
  * 	return proxy.uri("http://localhost:9000/foos/") //
- * 			.post(response -> ResponseEntity.status(response.getStatusCode()) //
+ * 			.post(response -&gt; ResponseEntity.status(response.getStatusCode()) //
  * 					.headers(response.getHeaders()) //
  * 					.header("X-Custom", "MyCustomHeader") //
  * 					.body(response.getBody()) //

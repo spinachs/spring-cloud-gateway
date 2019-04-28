@@ -16,27 +16,32 @@
 
 package org.springframework.cloud.gateway.handler.predicate;
 
+import org.springframework.cloud.gateway.support.NameUtils;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.ValidationException;
+import javax.validation.constraints.NotNull;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.validation.ValidationException;
-import javax.validation.constraints.NotNull;
-
-import org.springframework.cloud.gateway.support.NameUtils;
-import org.springframework.validation.annotation.Validated;
-
 import static org.springframework.util.StringUtils.tokenizeToStringArray;
 
 /**
+ * 定义路由规则，解析跟FilterDefinition相同.
+ *
  * @author Spencer Gibb
  */
 @Validated
 public class PredicateDefinition {
-
+	/**
+	 * 路由规则前缀，完整类名为${name}RoutePredicateFactory.
+	 */
 	@NotNull
 	private String name;
-
+	/**
+	 * 配置文件中等号后面值，逗号分隔，key为"_genkey_${数组下标}", value为数组值.
+	 */
 	private Map<String, String> args = new LinkedHashMap<>();
 
 	public PredicateDefinition() {

@@ -22,6 +22,8 @@ import org.springframework.cloud.gateway.route.RouteDefinition;
 import org.springframework.cloud.gateway.route.RouteDefinitionLocator;
 
 /**
+ * 从配置文件中读取路由配置。
+ *
  * @author Spencer Gibb
  */
 public class PropertiesRouteDefinitionLocator implements RouteDefinitionLocator {

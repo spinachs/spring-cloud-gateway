@@ -16,17 +16,18 @@
 
 package org.springframework.cloud.gateway.route;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
+import org.springframework.cloud.gateway.support.NotFoundException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import org.springframework.cloud.gateway.support.NotFoundException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static java.util.Collections.synchronizedMap;
 
 /**
+ * 内存中读取路由配置.
+ * 
  * @author Spencer Gibb
  */
 public class InMemoryRouteDefinitionRepository implements RouteDefinitionRepository {

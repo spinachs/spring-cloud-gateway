@@ -24,6 +24,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * 判断工程中是否正确导入webflux依赖，而不是web.
+ */
 @Configuration
 @AutoConfigureBefore(GatewayAutoConfiguration.class)
 public class GatewayClassPathWarningAutoConfiguration {

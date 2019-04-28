@@ -16,32 +16,6 @@
 
 package org.springframework.cloud.gateway.mvc;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.lang.reflect.WildcardType;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.Vector;
-import java.util.function.Function;
-
-import javax.servlet.ReadListener;
-import javax.servlet.ServletInputStream;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.WriteListener;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
-
 import org.springframework.core.Conventions;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.ParameterizedTypeReference;
@@ -64,6 +38,24 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
+
+import javax.servlet.ReadListener;
+import javax.servlet.ServletInputStream;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.WriteListener;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
+import java.lang.reflect.WildcardType;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * A <code>@RequestMapping</code> argument type that can proxy the request to a backend.
@@ -104,7 +96,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBody
  * &#64;PostMapping("/proxy")
  * public ResponseEntity&lt;Foo&gt; proxy(ProxyExchange&lt;Foo&gt; proxy) throws Exception {
  * 	return proxy.uri("http://localhost:9000/foos/") //
- * 			.post(response -> ResponseEntity.status(response.getStatusCode()) //
+ * 			.post(response -&gt; ResponseEntity.status(response.getStatusCode()) //
  * 					.headers(response.getHeaders()) //
  * 					.header("X-Custom", "MyCustomHeader") //
  * 					.body(response.getBody()) //

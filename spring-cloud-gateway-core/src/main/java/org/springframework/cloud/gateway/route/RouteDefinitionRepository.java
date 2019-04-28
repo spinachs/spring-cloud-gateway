@@ -17,6 +17,8 @@
 package org.springframework.cloud.gateway.route;
 
 /**
+ * 从存储器中读取路由配置.
+ *
  * @author Spencer Gibb
  */
 public interface RouteDefinitionRepository

@@ -16,19 +16,26 @@
 
 package org.springframework.cloud.gateway.handler;
 
-import java.util.function.Function;
-
 import org.reactivestreams.Publisher;
+import org.springframework.util.Assert;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import org.springframework.util.Assert;
+import java.util.function.Function;
 
 /**
+ * 用户条件匹配.
+ *
  * @author Ben Hale
  */
 public interface AsyncPredicate<T> extends Function<T, Publisher<Boolean>> {
 
+	/**
+	 * 与操作.
+	 *
+	 * @param other
+	 * @return
+	 */
 	default AsyncPredicate<T> and(AsyncPredicate<? super T> other) {
 		Assert.notNull(other, "other must not be null");
 
@@ -36,10 +43,19 @@ public interface AsyncPredicate<T> extends Function<T, Publisher<Boolean>> {
 				.map(tuple -> tuple.getT1() && tuple.getT2());
 	}
 
+	/**
+	 * 非操作.
+	 * @return
+	 */
 	default AsyncPredicate<T> negate() {
 		return t -> Mono.from(apply(t)).map(b -> !b);
 	}
 
+	/**
+	 * 或操作.
+	 * @param other
+	 * @return
+	 */
 	default AsyncPredicate<T> or(AsyncPredicate<? super T> other) {
 		Assert.notNull(other, "other must not be null");
 
